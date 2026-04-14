@@ -1,1 +1,52 @@
+#include <iostream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+struct Fire {
+    int x, y;
+    bool active;
+};
+
+class FireFighter {
+private:
+    int posX, posY;
+    int waterLevel;
+
+public:
+    FireFighter(int x, int y) : posX(x), posY(y), waterLevel(100) {}
+
+    void moveTo(int targetX, int targetY) {
+        posX = targetX;
+        posY = targetY;
+        cout << "Moved to: (" << posX << ", " << posY << ")" << endl;
+    }
+
+    void extinguish(Fire &f) {
+        if (posX == f.x && posY == f.y && waterLevel > 0) {
+            f.active = false;
+            waterLevel -= 10;
+            cout << "Fire extinguished at (" << f.x << ", " << f.y << ")" << endl;
+        }
+    }
+
+    int getX() { return posX; }
+    int getY() { return posY; }
+};
+
+int main() {
+    FireFighter robot(0, 0);
+    vector<Fire> fires = {{2, 3, true}, {5, 5, true}};
+
+    for (auto &f : fires) {
+        if (f.active) {
+            cout << "Detecting fire at (" << f.x << ", " << f.y << ")" << endl;
+            robot.moveTo(f.x, f.y);
+            robot.extinguish(f);
+        }
+    }
+
+    return 0;
+}
 
