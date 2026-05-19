@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rail Reservation System</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f4f4f4; }
+        .booking-card { background: white; padding: 20px; border-radius: 8px; max-width: 400px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        select, input { width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc; }
+        button { background: #007bff; color: white; border: none; padding: 10px; width: 100%; border-radius: 4px; cursor: pointer; }
+        #receipt { margin-top: 20px; padding: 10px; background: #e9f7ef; border-left: 5px solid #2ecc71; display: none; }
+    </style>
+</head>
+<body>
+
+<div class="booking-card">
+    <h2>Book Your Train Ticket</h2>
+    <div class="form-group">
+        <label for="route">Select Route:</label>
+        <select id="route">
+            <option value="metro-line" data-price="50">Metro Line (Downtown to Central)</option>
+            <option value="express-line" data-price="120">Express Line (City A to City B)</option>
+            <option value="intercity" data-price="250">Intercity Bullet Train</option>
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label for="ticketClass">Travel Class:</label>
+        <select id="ticketClass">
+            <option value="economy" data-multiplier="1.0">Economy Class</option>
+            <option value="standard" data-multiplier="1.3">Standard Class</option>
+            <option value="first" data-multiplier="2.0">First Class</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="passengers">Number of Passengers:</label>
+        <input type="number" id="passengers" value="1" min="1" max="10">
+    </div>
+
+    <button id="bookBtn">Calculate & Reserve</button>
+
+    <div id="receipt"></div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
+document.getElementById('bookBtn').addEventListener('click', () => {
+    // 1. Fetch DOM elements
+    const routeSelect = document.getElementById('route');
+    const classSelect = document.getElementById('ticketClass');
+    const passengerInput = document.getElementById('passengers');
+    const receiptDiv = document.getElementById('receipt');
+
+    // 2. Extract selected ticket values
+    const selectedRoute = routeSelect.options[routeSelect.selectedIndex].text;
+    const basePrice = parseFloat(routeSelect.options[routeSelect.selectedIndex].getAttribute('data-price'));
+    const classMultiplier = parseFloat(classSelect.options[classSelect.selectedIndex].getAttribute('data-multiplier'));
+    const passengerCount = parseInt(passengerInput.value);
+
+    // 3. Validate input data
+    if (isNaN(passengerCount) || passengerCount < 1) {
+        alert('Please enter a valid number of passengers.');
+        return;
+    }
+
+    // 4. Execute final fare metrics computation
+    const pricePerTicket = basePrice * classMultiplier;
+    const totalFare = pricePerTicket * passengerCount;
+    const ReferencePNR = 'RAIL' + Math.floor(100000 + Math.random() * 900000);
+
+    // 5. Update UI with ticket information
+    receiptDiv.style.display = 'block';
+    receiptDiv.innerHTML = `
+        <h3>Reservation Successful!</h3>
+        <p><strong>PNR Number:</strong> ${ReferencePNR}</p>
+        <p><strong>Route:</strong> ${selectedRoute}</p>
+        <p><strong>Tickets:</strong> ${passengerCount}</p>
+        <p><strong>Total Fare:</strong> $${totalFare.toFixed(2)}</p>
+    `;
+});
