@@ -82,3 +82,5 @@ document.getElementById('bookBtn').addEventListener('click', () => {
         <p><strong>Total Fare:</strong> $${totalFare.toFixed(2)}</p>
     `;
 });
+
+yo
