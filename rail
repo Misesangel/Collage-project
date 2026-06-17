@@ -83,4 +83,4 @@ document.getElementById('bookBtn').addEventListener('click', () => {
     `;
 });
 
-return
+return 0;
